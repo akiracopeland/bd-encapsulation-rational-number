@@ -57,7 +57,7 @@ public class RationalNumberTest {
 
         //THEN
         assertTrue(Double.compare(oneDecimal, decimalOutput) == 0,
-                   "Expected 1/1 to have decimal value of 1.0");
+                "Expected 1/1 to have decimal value of 1.0");
     }
 
     @Test
@@ -92,24 +92,27 @@ public class RationalNumberTest {
     public void constructor_withZeroDenominator_throwsException() {
         //WHEN & THEN
         Assertions.assertThrows(IllegalArgumentException.class, () -> new RationalNumber(1, 0),
-                                "The constructor should not allow an illegal denominator value of 0.");
+                "The constructor should not allow an illegal denominator value of 0.");
     }
 
     @Test
     public void update_withZeroDenominator_throwsException() {
         //GIVEN
-        RationalNumber half = new RationalNumber(1, 2);
+        RationalNumber original = new RationalNumber();
+        RationalNumber half = new RationalNumber(original);
+
+        half.update(1,2);
 
         //WHEN & THEN
-        Assertions.assertThrows(IllegalArgumentException.class, () -> half.denominator = 0, "You should not "
-            + "be able to edit an existing RationalNumber and make it invalid with a 0 value denominator.");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> half.update(half.getNumerator(),0), "You should not "
+                + "be able to edit an existing RationalNumber and make it invalid with a 0 value denominator.");
     }
 
     @Test
     public void equals_withMixedReducedNonReducedRationals_returnsEqual() {
         //GIVEN
-        RationalNumber half = new RationalNumber(1, 2);
-        RationalNumber half2 = new RationalNumber(2, 4);
+        RationalNumber half = new RationalNumber(1,2);
+        RationalNumber half2 = new RationalNumber(2,4);
 
         //WHEN
         boolean equal = half.equals(half2);
@@ -121,15 +124,29 @@ public class RationalNumberTest {
     @Test
     public void equals_withUpdatedReducedNonReducedRationals_returnsEqual() {
         //GIVEN
-        RationalNumber half = new RationalNumber(1, 2);
-        RationalNumber half2 = new RationalNumber(1, 2);
-        half2.numerator = 2;
-        half2.denominator = 4;
+        RationalNumber original = new RationalNumber();
+        RationalNumber half = new RationalNumber(original);
+        RationalNumber half2 = new RationalNumber(original);
+        half.update(1,2);
+        half2.update(2,4);
 
         //WHEN
-        boolean equal = half.equals(half2);
+        boolean equal = half.equals(half2);;
 
         //THEN
         assertTrue(equal, "1/2 and 2/4 should be equal.");
+    }
+
+    @Test
+    public void constructor_existingRationalNumber_createsCopy() {
+        //GIVEN
+        RationalNumber original = new RationalNumber(1, 2);
+        RationalNumber copy = new RationalNumber(original);
+        //WHEN
+        boolean equalityCheck = original.equals(copy);
+        boolean referenceCheck = original == copy;
+
+        //THEN
+        assertTrue(equalityCheck && !referenceCheck, "Should have the same state but different object reference");
     }
 }

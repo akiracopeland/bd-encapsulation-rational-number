@@ -24,13 +24,12 @@ public class RationalNumber {
      * @param denominator the rational number's denominator (the one on the bottom)
      */
     public RationalNumber(int numerator, int denominator) {
-        if (denominator == 0) {
-            throw new IllegalArgumentException("Denominator cannot be 0.");
-        }
-        this.numerator = numerator;
-        this.denominator = denominator;
+        setNumbers(numerator,denominator);
+    }
 
-        reduce();
+    public RationalNumber(RationalNumber original) {
+        this.numerator = original.numerator;
+        this.denominator = original.denominator;
     }
 
     /**
@@ -102,5 +101,28 @@ public class RationalNumber {
             denominator = -denominator;
             numerator = -numerator;
         }
+    }
+
+    public int getNumerator() {
+        return numerator;
+    }
+
+    public int getDenominator() {
+        return denominator;
+    }
+
+    public void update(int numerator, int denominator) {
+        setNumbers(numerator, denominator);
+    }
+
+    public void setNumbers (int numerator, int denominator) {
+        if (denominator == 0) {
+            throw new IllegalArgumentException("Denominator cannot be 0.");
+        }
+
+        this.numerator = numerator;
+        this.denominator = denominator;
+
+        this.reduce();
     }
 }
